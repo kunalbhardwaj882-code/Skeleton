@@ -83,8 +83,10 @@
     <button id="manualPaidBtn">I have paid</button>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://skeleton.up.railway.app/socket.io/socket.io.js"></script>
   <script>
+    const socket = io("https://skeleton.up.railway.app");
+
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -97,7 +99,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const socket = io();
     const userInput = document.getElementById("userInput");
     const genderSelect = document.getElementById("genderSelect");
     const joinBtn = document.getElementById("joinBtn");
@@ -124,7 +125,6 @@
       const isPhone = /^\d{10}$/.test(input);
       if (!isEmail && !isPhone) return alert("Invalid email or phone.");
 
-      // Save to Firebase
       const userId = "user-" + Date.now();
       db.ref("users/" + userId).set({ id: input, gender, joinedAt: new Date().toISOString() });
 
@@ -199,7 +199,7 @@
 
     function startTimer() {
       timer = setTimeout(() => {
-        alert("Session ended (5 minutes).);
+        alert("Session ended (5 minutes).");
         closeConnection();
       }, chatDuration);
 
