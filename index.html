@@ -2,58 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Random Video Chat</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
       color: white;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
     input, select, button {
-      padding: 12px 20px;
-      font-size: 16px;
+      padding: 12px;
+      margin: 8px;
       border: none;
       border-radius: 8px;
-      margin: 8px;
+      font-size: 16px;
     }
-    input, select { width: 250px; }
     button {
       background-color: #ff4b2b;
       color: white;
       cursor: pointer;
-      transition: 0.3s;
     }
-    button:hover { background-color: #ff416c; }
+    button:hover {
+      background-color: #ff416c;
+    }
     video {
       width: 300px;
       height: 225px;
+      margin: 10px;
       background: black;
-      border-radius: 12px;
+      border-radius: 10px;
     }
-    #videoChat, #chatSection, #paymentSection {
+    #videoChat, #paymentSection {
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
     }
   </style>
-  <!-- PayPal SDK -->
-  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
-  <!-- Firebase SDK -->
+
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
 </head>
+
 <body>
   <h1>🎥 Random Video Chat</h1>
 
-  <!-- Login Section -->
   <div id="loginSection">
     <input type="text" id="userInput" placeholder="Enter Email or Phone" />
     <select id="genderSelect">
@@ -64,8 +65,7 @@
     <button id="joinBtn">Join Chat</button>
   </div>
 
-  <!-- Chat Section -->
-  <div id="chatSection">
+  <div id="chatSection" style="display:none;">
     <div id="videoChat">
       <video id="localVideo" autoplay muted playsinline></video>
       <video id="remoteVideo" autoplay playsinline></video>
@@ -73,28 +73,27 @@
     <button id="restartChatBtn" style="display:none;">Restart Chat</button>
   </div>
 
-  <!-- Payment Section -->
   <div id="paymentSection">
     <p>⏱️ Free trial over! Pay to continue:</p>
     <div id="paypal-button-container"></div>
     <p>Or pay manually via UPI:</p>
-    <img src="https://via.placeholder.com/200x200.png?text=Your+UPI+QR" alt="QR" style="width:200px;height:200px;border-radius:8px;" />
+    <img src="https://via.placeholder.com/200x200.png?text=Your+UPI+QR" alt="UPI QR" style="width:200px;height:200px;">
     <p>UPI ID: <strong>yourupi@bank</strong></p>
     <button id="manualPaidBtn">I have paid</button>
   </div>
 
-  <script src="https://skeleton.up.railway.app/socket.io/socket.io.js"></script>
+  <script src="https://skeleton-hy29.onrender.com/socket.io/socket.io.js"></script>
   <script>
-    const socket = io("https://skeleton.up.railway.app");
+    const socket = io("https://skeleton-hy29.onrender.com");
 
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
+      apiKey: "YOUR_FIREBASE_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
       databaseURL: "https://YOUR_PROJECT.firebaseio.com",
       projectId: "YOUR_PROJECT",
       storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "XXXX",
-      appId: "XXXX"
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
@@ -226,7 +225,6 @@
 
     function showPaymentOptions() {
       paymentSection.style.display = "flex";
-
       paypal.Buttons({
         createOrder: (data, actions) => actions.order.create({
           purchase_units: [{ amount: { value: "1.00" } }]
